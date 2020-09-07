@@ -1,0 +1,7 @@
+.DS_Store
+.idea
+*.log
+META-INF/
+*.iml
+out/
+target/
