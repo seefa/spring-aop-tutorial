@@ -2,10 +2,7 @@ package ir.seefa.tutorial.spring.bean;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -23,21 +20,23 @@ public class LoggingAspectBean {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Around("execution(* ir.seefa.tutorial.spring.*.*.send(..))")
-    public void logAroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logAroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         StopWatch watch = new StopWatch();
         watch.start();
         joinPoint.proceed();
         watch.stop();
         logger.info("@Around call took:" + watch.getTotalTimeMillis() + " ms");
+        return joinPoint;
     }
 
     @Around("execution(* ir.seefa.tutorial.spring.*.*.set(..))")
-    public void aroundSetMethodAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object aroundSetMethodAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         StopWatch watch = new StopWatch();
         watch.start();
         joinPoint.proceed();
         watch.stop();
         logger.info("@Around set method took:" + watch.getTotalTimeMillis() + " ms");
+        return joinPoint;
     }
 
     @Before("execution(* ir.seefa.tutorial.spring.*.*.set*(..))")
@@ -49,5 +48,11 @@ public class LoggingAspectBean {
     @After("execution(* ir.seefa.tutorial.spring.*.*.get*(..))")
     public void logAfterMethodAdvice(JoinPoint joinPoint) {
         logger.info("****LoggingAspect.logAfterMethodAdvice() : " + joinPoint.getSignature().getName());
+    }
+
+    @AfterThrowing(value = "execution(* ir.seefa.tutorial.spring.*.*.*WithException(..))", throwing = "ex")
+    public void logAfterThrowingAdvice(Exception ex) throws Throwable {
+        logger.info("@AfterThrowing exception raised: " + ex.toString());
+        throw ex;
     }
 }

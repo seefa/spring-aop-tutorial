@@ -57,6 +57,11 @@ public class EmailServiceImpl {
         System.out.println("2.1. Email Service called and message is: " + msg);
     }
 
+    public void sendWithException(String msg) {
+        System.out.println("2.2. Email Service called and message is: " + msg);
+        throw new ArrayIndexOutOfBoundsException();
+    }
+
     @Override
     public String toString() {
         return "EmailServiceImpl{" +
