@@ -32,5 +32,11 @@ public class Application {
         emailService.send("Hello Seefa Spring AOP sample");
 
         logger.info("Email service model is: " + emailService.getFrom() + " - " + Arrays.toString(emailService.getTo()) + " - " + emailService.getSubject() + " - " + emailService.getBody());
+
+        try {
+            emailService.sendWithException("An exception happened :(");
+        } catch (Exception e) {
+            logger.info("Exception caught :) " + e.toString());
+        }
     }
 }
